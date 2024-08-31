@@ -123,7 +123,9 @@
 		  -->
       </div>
       
-      <p>Users of the Web often want to search documents for particular words or phrases within the natural language text of a given document. This is different from the sorts of programmatic matching needed by formal languages (such as markup languages such as [[HTML]]; style sheets [[CSS21]]; or data formats such as [[TURTLE]] or [[JSON-LD]]), and which are described by our document [[CHARMOD-NORM]].</p>
+      <p>Users of the Web often want to find specific text within the contents of a document without having to read through the document line-by-line. User-agents (such as browsers) often provide features to assist users with this task. Specifications also sometimes try to provide this type of query mechanism, exposing text searching in the Web platform.</p>
+      
+      <p>This type of searching operation is different from the sorts of programmatic matching needed by formal languages, such as markup languages like [[HTML]]; style sheets [[CSS21]]; or data formats such as [[TURTLE]] or [[JSON-LD]]. Formal language matching is described by our document <cite>String Matching</cite> [[CHARMOD-NORM]].</p>
       
       <p>There are different types of string searching. A <a>full text search</a> is the type of searching most often found in applications such as a search engine (Examples include Google, Bing, or DuckDuckGo). This type of searching is complex, can be resource intensive, and often depends on processes outside the scope of a given search request.</p> 
     
@@ -131,20 +133,46 @@
       
       <p>Find operations can have options or implementation details, such as the addition or removal of case sensitivity, or whether the feature supports different aspects of a regular expression language or "wildcards".</p>
       
-      <p>One way that sub-string matching usually differs from <a>full-text search</a> is that, while it may use algorithms in an attempt to suppress or ignore textual variations, it usually does not produce matches that contain additional or unspecified character sequences, words, or phrases, such as would result from <a>stemming</a> or other <a>NLP</a> processes.</p>
+      <p>One way that sub-string matching usually differs from <a>full-text search</a> is that, while it might use various algorithms in an attempt to suppress or ignore textual variations, it usually does not produce matches that contain additional or unspecified character sequences, words, or phrases, such as would result from <a>stemming</a> or other <a>NLP</a> processes.</p>
       
-      <p>Quite often, the user's input does not use a sequence of <a>code points</a> identical to that in the text being searched. This can happen for a variety of reasons. Sometimes it is because the <a>corpus</a> varies in ways the user cannot predict. In other cases it is because the user's keyboard or input method does not provide ready access to the textual variations needed, or because the user cannot be bothered to input the text accurately. In this section, we examine various common cases known to us.</p>
+      <p>Quite often, the user's input does not use a sequence of <a>code points</a> identical to that in the text being searched. This can happen for a variety of reasons. Sometimes it is because the <a>corpus</a> being searched varies in ways the user cannot predict. In other cases it is because the user's keyboard or input method does not provide ready access to the textual variations needed, or because the user cannot be bothered to input the text accurately. In this section, we examine various common cases known to us.</p>
       
-      <p>A significant issue with find operations is that the language of the <a>corpus</a> and the language of the search term can affect how the various processes mentioned elsewhere in this document are applied. For example, case folding is occasionally locale-affected. Similarly, throughout this document, the handling of accents, alternate scripts, or encoding is linked to the specific language of the text in question. It's important to emphasize that we mean <em>language</em> here, and not <a data-cite="i18n-glossary#dfn-script">script</a>, for different languages that share a script very often apply different processing or imply different expectations.</p>
+      <p>A significant issue with find operations is that the language of the <a>corpus</a> and the language of the search term can affect how the various processes mentioned elsewhere in this document are applied. For example, case folding is occasionally locale-affected. Similarly, throughout this document, the handling of accents, alternate scripts, or character encoding (such as variations in the formation of <a>grapheme clusters</a>) is linked to the specific language of the text in question. It's important to emphasize that we mean <em>language</em> here, and not <a data-cite="i18n-glossary#dfn-script">script</a>, for different languages that share a script very often apply different processing or imply different expectations.</p>
       
-      <p>Find features in user interfaces often have to guess what language the user intended based solely on the user's input or on readily available information (the operating environment locale, the user agent's localization, the language of the active keyboard). These hints are, at best, a proxy for the user's intent, particularly when the user is searching a document that doesn't match any of these or when the searched document contains more than one language.</p>
+      <p>Implementations of a "find" feature often have to guess what language the user intended based solely on the user's input or on various "hints" in the runtime environment, such as the operating environment locale, the user agent's localization, or the language of the active keyboard. These hints are, at best, a proxy for the user's intent, particularly when the user is searching a document that doesn't match any of these or when the searched document contains more than one language.</p>
       
-      <p></p>
+      <aside class="example" id="text-frag-lang">
+		  <p class="issue">This example is under development.</p>
+		  <p>The examples found here are borrowed from a page created by Henri Sivonen.</p>
+		  <p lang="en">Note that in search collations in English (root) <q>ae</q> is primary-different from <q>a</q> and <q>ä</q>, which in turn are primary-equal with each other. In German <q>a</q> is primary-different from <q>ae</q> and <q>ä</q>. In Finnish “a”, “ae”, and “ä” are all primary-different from each other. Here is a Finnish sentence language-tagged as Finnish within the English paragraph:
+             <span lang="fi">Haen Han Solon. Hän on salakuljettaja.</span>
+         (For the curious, this translates to: <em>I’ll go get Han Solo. He is a smuggler.</em>)</p>
+         <p lang="en">Here is the same sentence. This time the substring <q>Han Solo</q>, excluding the “n” (a suffix that is part of the Finnish language) is language-tagged as English:
+             <span lang="fi">Haen <span lang="en">Han Solo</span>n. Hän on salakuljettaja.</span>
+         </p>
+         <p lang="en">And again without tagging “Han Solo” as English but in Normalization Form D instead of Normalization Form C:
+             <span lang="fi">Haen Han Solon. Hän on salakuljettaja.</span>
+         Followed by a paragraph language-tagged as Finnish:</p>
+         <p lang="fi">Haen Han Solon. Hän on salakuljettaja.</p>
+         <p>Here is a phrase that we believe means <em>warm marrow</em> in Turkish, tagged as Turkish: <span lang="tr">ılık ilik</span>. And as a paragraph:</p>
+         <p lang="tr">ılık ilik</p>
+         <p lang="en">Finally, so fragment links to this page:</p>
+    <ul>
+      <li><a href="#:~:text=Han">Han</a></li>
+      <li><a href="#:~:text=Hän">Hän</a></li>
+      <li><a href="#:~:text=Haen">Haen</a></li>
+      <li><a href="#:~:text=han">han</a></li>
+      <li><a href="#:~:text=hän">hän</a></li>
+      <li><a href="#:~:text=haen">haen</a></li>
+      <li><a href="#:~:text=ILIK">ILIK</a></li>
+    </ul>
+      </aside>
+      
       
 	  <section id="otherEquivalences">
-         <h3>Additional Types of Equivalence</h3>
+         <h3>Problems with Determining Equivalence</h3>
          
-         <p>When searching text, the concept of "grapheme boundaries" and "user-perceived characters" can be important. See Section 3 of <cite>Character Model for the World Wide Web: Fundamentals</cite> [[CHARMOD]] for a description. For example, if the user has entered a capital "A" into a search box, should the software find the character &#xc0; (<code class="uname" translate="no">U+00C0 LATIN CAPITAL LETTER A WITH ACCENT GRAVE</code>)? What about the character "A" followed by <code class="uname" translate="no">U+0300 COMBINING ACCENT GRAVE</code>? What about writing systems, such as Devanagari, which use combining marks to suppress or express certain vowels?</p>
+         <p>When searching text, the concept of "<a>grapheme</a> boundaries" and "user-perceived characters" can be important. See Section 3 of <cite>Character Model for the World Wide Web: Fundamentals</cite> [[CHARMOD]] for a description. For example, if the user has entered a capital "A" into a search box, should the software find the character &#xc0; (<code class="uname" translate="no">U+00C0 LATIN CAPITAL LETTER A WITH ACCENT GRAVE</code>)? What about the character "A" followed by <code class="uname" translate="no">U+0300 COMBINING ACCENT GRAVE</code>? What about writing systems, such as Devanagari, which use combining marks to suppress or express certain vowels?</p>
          
          <p>In order to describe or implement sub-string matching, it is necessary to understand the types of textual variation that users expect the search feature to pay attention to (or ignore) and the types of features that the implementation will need to consider when building the searching algorithm.</p>
          
@@ -717,55 +745,6 @@
       <p>The W3C Internationalization Working Group and Interest Group, as well as others, provided many comments and suggestions. The Working Group would like to thank: all of the contributors to the Character Model series of documents over the many years of their development.</p>
       
       <p>The examples in <a href="text-frag-lang"></a> were taken from a page authored by Henri Sivonen, as were a number of concepts and ideas recorded by him in <a href="https://github.com/WICG/scroll-to-text-fragment/issues/233">this issue</a>.</p>
-    </section>
-    
-    <section id="text-frag-lang" lang="de">
-	<h2 lang="en">Text fragment language</h2>
-	<p lang="en">This section was borrowed from an example page by Henri Sivonen.</p>
-    <p lang="en">
-      The root element of this section is tagged as German. The heading above
-      and this paragraph are tagged as English. The list of links in the end is
-      not language-tagged and, therefore, should count as German. Note that in
-      search collations in English (root) “ae” is primary-different from “a” and
-      “ä”, which in turn are primary-equal with each other, in German “a” is
-      primary-different from “ae” and “ä”, and in Finnish “a”, “ae”, and “ä” are
-      all primary-different from each other. Here is a Finnish sentence
-      language-tagged as Finnish within the English paragraph:
-      <span lang="fi">Haen Han Solon. Hän on salakuljettaja.</span> (For the
-      curious, this translates to: I’ll go get Han Solo. He is a smuggler.)
-    </p>
-    <p lang="en">
-      Let’s try that again this time the substring <q>Han Solo</q>, excluding the “n”
-      language-tagged as English:
-      <span lang="fi"
-        >Haen <span lang="en">Han Solo</span>n. Hän on salakuljettaja.</span
-      >
-    </p>
-    <p lang="en">
-      And again without tagging “Han Solo” as English but in Normalization Form
-      D instead of Normalization Form C:
-      <span lang="fi">Haen Han Solon. Hän on salakuljettaja.</span> Followed
-      by a paragraph language-tagged as Finnish:
-    </p>
-    <p lang="fi">Haen Han Solon. Hän on salakuljettaja.</p>
-    <p>
-      Let’ try what I have been lead to believe means “warm marrow” in Turkish
-      tagged as Turkish: <span lang="tr">ılık ilik</span> And as a paragraph:
-    </p>
-    <p lang="tr">ılık ilik</p>
-    <p lang="en">
-      Finally, so fragment links to this page (untagged and, therefore, should
-      be considered German):
-    </p>
-    <ul>
-      <li><a href="#:~:text=Han">Han</a></li>
-      <li><a href="#:~:text=Hän">Hän</a></li>
-      <li><a href="#:~:text=Haen">Haen</a></li>
-      <li><a href="#:~:text=han">han</a></li>
-      <li><a href="#:~:text=hän">hän</a></li>
-      <li><a href="#:~:text=haen">haen</a></li>
-      <li><a href="#:~:text=ILIK">ILIK</a></li>
-    </ul>
     </section>
   </body>
 </html>

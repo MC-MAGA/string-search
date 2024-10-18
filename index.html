@@ -135,7 +135,7 @@
       
         
 	  <section id="otherEquivalences">
-         <h3>Problems with Determining Equivalence</h3>   
+      <h3>Problems with Determining Equivalence</h3>   
       
       <p>Quite often, the user's input doesn't consist of exactly the same sequence of <a>code points</a> as that used in the document being searched, while the user still expects a match to occur. This can happen for a variety of reasons. Sometimes it is because the text being searched varies in ways the user could not have predicted. In other cases it is because the user's keyboard or input method does not provide ready access to the textual variations needed. It can even be because the user cannot be bothered to input the text accurately.</p>
       
@@ -145,32 +145,27 @@
       <section id="languageVariation">
       <h3>Matching variation due to language</h3>
       
-      <p>User expectations about whether their search term matches a given part of a document sometimes depends on the user's language, the language of the document, or both. This is because operations, such as case folding, are occasionally locale-affected. Similarly, throughout this document, the handling of accents, alternate scripts, or character encoding (such as variations in the formation of <a>grapheme clusters</a>) is linked to the specific language of the text in question.</p>
+      <p>User expectations about whether their search term matches a given part of a document or [=corpus=] sometimes depends on the user's language, the language of the document, or both. It might also involve other factors, such as which keyboards or input methods are available on a given device. This might be because various operations that are part of searching, such as case folding, are locale-affected, or that, given the complexity of human language and culture, that expectations about matching or about the use and interpretation of various character sequences differs, even within a given <a data-cite="i18n-glossary#dfn-script">script</a>. Similarly, the handling of accents, alternate scripts, or character encoding (such as variations in the formation of <a>grapheme clusters</a>) is linked to the specific language of the text in question.</p>
       
       <p>It is important to emphasize that we mean <em>language</em> here, and not <a data-cite="i18n-glossary#dfn-script">script</a>. Many different languages that share a script apply different processing or imply different expectations.</p>
       
       <p>Implementations of a "find" feature often have to guess what language the user intended based solely on the user's input or on various "hints" in the runtime environment, such as the operating environment locale, the user agent's localization, or the language of the active keyboard. These hints are, at best, a proxy for the user's intent, particularly when the user is searching a document that doesn't match any of these or when the searched document contains more than one language.</p>
       
       <aside class="example" id="text-frag-lang">
-		  <p class="issue">This example is under development.</p>
-		  <p>The examples found here are borrowed from a page created by Henri Sivonen.</p>
 		  
-		  <p>Let's consider some examples of text that a user might search.</p>
-		  
-		  <p>Suppose one uses the Unicode Collation Algorithm (UCA) [[UTS10]] to perform matching.</p>
 		  <p>Different languages treat the letter combinations <q>a</q>, <q>ae</q>, and <q>ä</q> differently.
-		     In English, <q>ae</q> is primary-different from <q>a</q> and <q>ä</q>.
-		     In German, <q>a</q> is primary-different from <q>ae</q> and <q>ä</q> (which are equivalent to each other).
-		     In Finnish, all three are primary-different from one another.
+		     English speakers expect <q>ae</q> to be different from <q>a</q> and <q>ä</q>. Since <q>ä</q> is a foreign letter, they usually expect it to match the unmarked <q>a</q>.
+		     German speakers expect <q>ae</q> and <q>ä</q> to be equivalent (and different from <q>a</q>).
+		     Finnish speakers expect all three to be separate.
 		  </p>
 		  
 		  <p>Now suppose you have a sentence in Finnish:
-		     <strong lang="fi">Haen Han Solon. Hän on salakuljettaja.</strong></p>
+		     <strong lang="fi" dir="ltr">Haen Han Solon. Hän on salakuljettaja.</strong></p>
 		  <p>(For the curious, this translates to: <em>I’ll go get Han Solo. He is a smuggler.</em>)</p>
 		  
-		  <p>The above sentence is tagged as Finnish (<code translate=no>lang="fi"</code>). Notice that the letter "n" attached to the end of Han Solo's name is a part of Finnish grammar.</p>
+		  <p>The above sentence is tagged as Finnish (<code translate=no>lang="fi"</code>). Notice that the letter "n" attached to the end of Han Solo's name (<em>Han Solon</em>) is a part of Finnish grammar.</p>
 		  
-		  <p>Here are some spelling variations that speakers of each of these languages might enter into a find feature or API:</p>
+		  <p>Here are some spelling variations that speakers of English, German, and Finnish might enter when performing a "find" operation on the text:</p>
           <ul>
             <li>Han</li>
             <li>Hän</li>
@@ -180,7 +175,7 @@
             <li>haen</li>
           </ul>		  
 
-          <p>Finnish speakers expect that each of the above examples is a different word. They might expect that case variations between <kbd>Hän</kbd> and <kbd>hän</kbd> might be ignored.
+          <p>Finnish speakers expect that each of the above examples is a different word. They might expect that the case variation between <kbd>Hän</kbd> and <kbd>hän</kbd> might be ignored.
           German speakers might expect that <kbd>Hän</kbd> and <kbd>Haen</kbd> are equivalent.
           English speakers might expect <kbd>Han</kbd> to match <kbd>Hän</kbd> (but perhaps not the reverse, since <q>ä</q> is not native to English).
           However, the language tagging of the document doesn't seem to affect most find operations. 
@@ -195,7 +190,8 @@
              <li>ilik</li>
              <li>ılık</li>
          </ul>
-         <p>Depending on your browser and runtime locale, you can get anomolous matching with these terms. The first three terms above consistently match <q>ilik</q> (with an ASCII dotted-i) but not the word <q>ılık</q> with <span class="codepoint" translate="no"><bdi lang="tr">&#x131;</bdi><code class="uname">U+0131 LATIN SMALL LETTER DOTLESS I</code></span>. This is not what Turkish users would expect.</p>
+         <p>Depending on your browser and runtime locale, you can get anomolous matching with these terms. In some browsers, the first three terms above consistently match <q>ilik</q> (with an ASCII dotted-i) but not the word <q>ılık</q> with <span class="codepoint" translate="no"><bdi lang="tr">&#x131;</bdi><code class="uname">U+0131 LATIN SMALL LETTER DOTLESS I</code></span>.</p>
+         <p>This is not what Turkish users would expect, since they expect "I"/"ı" and "İ"/"i" to be caseless pairs. A side-effect of this is that the search term "ılık" only matches its lowercase equivalent&mdash;and that the uppercase variations do not match that word. Such variation means that both English and Turkish users will notice that the search misses words.</p>
       </aside>
       
       </section>
@@ -769,7 +765,7 @@
       <h2 id="Acknowledgements" class="informative">Acknowledgements</h2>
       <p>The W3C Internationalization Working Group and Interest Group, as well as others, provided many comments and suggestions. The Working Group would like to thank: all of the contributors to the Character Model series of documents over the many years of their development.</p>
       
-      <p>The examples in <a href="text-frag-lang"></a> were taken from a page authored by Henri Sivonen, as were a number of concepts and ideas recorded by him in <a href="https://github.com/WICG/scroll-to-text-fragment/issues/233">this issue</a>.</p>
+      <p>The examples in <a href="text-frag-lang">this example</a> were taken from a page authored by Henri Sivonen, as were a number of concepts and ideas recorded by him in <a href="https://github.com/WICG/scroll-to-text-fragment/issues/233">this issue</a>.</p>
     </section>
   </body>
 </html>

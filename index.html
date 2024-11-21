@@ -151,7 +151,7 @@
       
       <p>Implementations of a "find" feature often have to guess what language the user intended based solely on the user's input or on various "hints" in the runtime environment, such as the operating environment locale, the user agent's localization, or the language of the active keyboard. These hints are, at best, a proxy for the user's intent, particularly when the user is searching a document that doesn't match any of these or when the searched document contains more than one language.</p>
       
-      <aside class="example" id="text-frag-lang">
+      <aside class="example" id="text-frag-lang" title="User language interaction with user expectations">
 		  
 		  <p>Different languages treat the letter combinations <q>a</q>, <q>ae</q>, and <q>ä</q> differently.
 		     English speakers expect <q>ae</q> to be different from <q>a</q> and <q>ä</q>. Since <q>ä</q> is a foreign letter, they usually expect it to match the unmarked <q>a</q>.
@@ -165,8 +165,8 @@
 		  
 		  <p>The above sentence is tagged as Finnish (<code translate=no>lang="fi"</code>). Notice that the letter "n" attached to the end of Han Solo's name (<em>Han Solon</em>) is a part of Finnish grammar.</p>
 		  
-		  <p>Here are some spelling variations that speakers of English, German, and Finnish might enter when performing a "find" operation on the text:</p>
-          <ul>
+		  <p>Here are some spelling variations that speakers of English, German, and Finnish might enter when performing a "find" operation on the text. (<em>Hint: Try them in the "find" command for your browser when viewing this page.</em>)</p>
+          <ul style="column-count: 2;">
             <li>Han</li>
             <li>Hän</li>
             <li>Haen</li>
@@ -184,14 +184,21 @@
 
          <p>Here is a phrase that we believe means <em>warm marrow</em> in Turkish: <strong lang="tr">ılık ilik</strong>.</p>
          <p>Here are some spelling variations that English and Turkish speakers might enter:</p>
-         <ul>
-             <li>ILIK</li>
-             <li>İLİK</li>
-             <li>ilik</li>
-             <li>ılık</li>
-         </ul>
+          
+         <table style="width: 80%;">
+			 <thead>
+				 <tr><th>Search Term</th><th>Code Points</th></tr>
+			 </thead>
+			 <tbody>
+				 <tr><td>ILIK</td><td><span class="uname">U+0049 U+004C U+0049 U+004B</span></td></tr>
+				 <tr><td>İLİK</td><td><span class="uname">U+0130 U+004C U+0130 U+004B</span></td></tr>
+				 <tr><td>ilik</td><td><span class="uname">U+0069 U+006C U+0069 U+006B</span></td></tr>
+				 <tr><td>ılık</td><td><span class="uname">U+0131 U+006C U+0131 U+006B</span></td></tr>
+			 </tbody>
+         </table>
+         
          <p>Depending on your browser and runtime locale, you can get anomolous matching with these terms. In some browsers, the first three terms above consistently match <q>ilik</q> (with an ASCII dotted-i) but not the word <q>ılık</q> with <span class="codepoint" translate="no"><bdi lang="tr">&#x131;</bdi><code class="uname">U+0131 LATIN SMALL LETTER DOTLESS I</code></span>.</p>
-         <p>This is not what Turkish users would expect, since they expect "I"/"ı" and "İ"/"i" to be caseless pairs. A side-effect of this is that the search term "ılık" only matches its lowercase equivalent&mdash;and that the uppercase variations do not match that word. Such variation means that both English and Turkish users will notice that the search misses words.</p>
+         <p>This is not what Turkish users would expect, since they expect "I"/"ı" and "İ"/"i" to be caseless pairs. A side-effect of this is that the search term "ılık" only matches its lowercase equivalent&mdash;and that the uppercase variations do not match that word, even when they match the lowercase version with dotted letter i ("ilik"). Such variation means that both English and Turkish users will notice that the search misses words.</p>
       </aside>
       
       </section>

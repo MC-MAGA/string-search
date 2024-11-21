@@ -109,7 +109,7 @@
       
       <p>There are different types of document searching. One type, called a <a>full text search</a>, is the sort of searching most often found in applications such as a search engine. This type of searching is complex, can be resource intensive, and often depends on processes outside the scope of a given search request.</p> 
     
-      <p>A more limited form of text search (and the topic of this document) is <q>sub-string matching</q>. One familiar form of sub-string matching is the <q><em>find</em></q> feature of browsers and other types of user-agent. In browsers, this functionality is often accessed via a key combination such as <kbd>Cmd+F</kbd> or <kbd>Ctrl+F</kbd>. Such a feature might be exposed on the Web via the API <code translate=no>window.find</code>, which is currently not fully standardized, or capabilities such as the proposed scroll-to-text-fragment.</p>
+      <p>A more limited form of text search (and the topic of this document) is <q>sub-string matching</q>. One familiar form of sub-string matching is the <q><em>find</em></q> feature of browsers and other types of user-agent. For user agents with physical keyboards, this functionality is often accessed via a key combination such as <kbd>Cmd+F</kbd> or <kbd>Ctrl+F</kbd>. Such a feature might be exposed on the Web via the API <code translate=no>window.find</code>, which is currently not fully standardized, or capabilities such as the proposed [[?SCROLL-TO-TEXT-FRAGMENT]].</p>
       
       <aside class="note">
           <p>Textual search is different from the sorts of programmatic matching needed by formal languages, such as markup languages like [[HTML]]; style sheets [[CSS21]]; or data formats such as [[TURTLE]] or [[JSON-LD]]. String matching in formal languages is described by our document <cite>String Matching</cite> [[CHARMOD-NORM]].</p>
@@ -701,7 +701,7 @@
       <section id="wordBoundary">
 		  <h3>Word boundaries and "whole word" matching</h3>
 		  
-		  <p>Some languages, such as English or Arabic, use spaces between words. Other languages, such as Chinese, Japanese, or Thai, don't. In many non-spacing languages, computing "whole word" matching depends on the ability to determine word boundaries when the boundaries are not themselves encoded into the text.</p>
+		  <p>Some languages, such as English or Arabic, use spaces between words. Other languages, such as Chinese, Japanese, or Thai, do not. Some language use spaces to separate other text units, such as phrases. In those languages that do not use spaces between words, computing "whole word" matching often depends on the ability to determine word boundaries when the boundaries are not themselves encoded into the text.</p>
       </section>
       </section><!-- end of "additional types of equivalence" -->
 	     

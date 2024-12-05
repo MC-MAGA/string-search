@@ -44,7 +44,7 @@
 </script> </head>
   <body>
     <section id="abstract">
-      <p>This document describes string searching operations on the Web in order to allow greater interoperability. String searching refers to natural language string matching such as the "find" command in a Web browser. This document builds upon the concepts found in <cite>Character Model for the World Wide Web 1.0: Fundamentals </cite>[[CHARMOD]] and <cite>Character Model for the World Wide Web 1.0: String Matching</cite> [[CHARMOD-NORM]] to provide authors of specifications, software developers, and content developers the information they need to describe and implement search features suitable for global audiences. </p>
+      <p>This document describes string searching operations on the Web in order to allow greater interoperability. String searching refers to natural language string matching such as the "find" command in a Web browser. This document builds upon the concepts found in <cite>Character Model for the World Wide Web 1.0: Fundamentals </cite>[[CHARMOD]] and <cite>Character Model for the World Wide Web 1.0: String Matching</cite> [[CHARMOD-NORM]] to provide authors of specifications, software developers, and content developers the information they need to describe and implement search features suitable for global audiences.</p>
     </section>
     <section id="sotd">
       <div class="note">
@@ -58,7 +58,7 @@
       <h2>Introduction</h2>
       <section id="goals">
         <h3>Goals and Scope</h3>
-        <p>This document describes the problems, requirements, and considerations for specification or implementations of string searching operations. A common example of string searching is the "find" command in a Web browser, but there are many other forms of searching that a specification might wish to define. </p>
+        <p>This document describes the problems, requirements, and considerations for specification or implementations of string searching operations. A common example of string searching is the "find" command in a Web browser, but there are many other forms of searching that a specification might wish to define.</p>
         
         <p class="note">This document builds on <cite>Character Model for the World Wide Web: Fundamentals</cite> [[CHARMOD]] and <cite>Character Model for the Word Wide Web: String Matching</cite> [[CHARMOD-NORM]]. Understanding the concepts in those documents are important to being able to understand and apply this document successfully.</p>
         
@@ -91,64 +91,123 @@
          
         <p class="definition"><dfn>Corpus</dfn> The natural language text contained by a document or set of documents which the user would like to search.</p>
         <p class="definition"><dfn>Segmentation</dfn> The process of breaking natural language text up into distinct words and phrases. This often includes operations such as "named entity recognition" (such as recognizing that the three word sequence <strong>Dr. Jonas Salk</strong> is a person's name).</p>
-        <p class="definition"><dfn data-lt="stemming|lemmatization">Stemming</dfn> A process or operation that reduces words to their "stem" or root. For example, the words <strong>runs</strong>, <strong>ran</strong>, and <strong>running</strong> all share the stem <strong>run</strong>. This some sometimes called (more formally) <em>lemmatization</em> and the stem is sometimes called the <em>lemma</em>.</p>
+        <p class="definition"><dfn data-lt="stemming|lemmatization">Stemming</dfn> A process or operation that reduces words to their "stem" or root. For example, the words <strong>runs</strong>, <strong>ran</strong>, and <strong>running</strong> all share the stem <strong>run</strong>. This is sometimes called (more formally) <em>lemmatization</em> and the stem is sometimes called the <em>lemma</em>.</p>
         
         <p class="definition"><dfn data-lt="full text search|full-text search|full text searching">Full-Text Search</dfn> refers to searches that process the entire contents of the textual document or set of documents. Full-text queries perform linguistic searches against text data in full-text indexes by operating on words and phrases based on the rules of a particular language such as English or Japanese. Full-text queries can include simple words and phrases or multiple forms of a word or phrase.</p>
         <p>Frequently this means that a <a>full-text search</a> employs indexes and natural language processing. When you are using a search engine, you are using a form of full text search. Full text search often breaks natural language text into words or phrases (this is called <a>segmentation</a>) and may apply complex processing to get at the semantic "root" values of words (this is called <a>stemming</a>). These processes are sensitive to language, context, and many other aspects of textual variation.</p>
+        
+        <p class="definition"><dfn data-lt="natural language processing|NLP">Natural Language Processing</dfn> (<abbr title="natural language processing">NLP</abbr>) refers to the domain of software designed to understand, process, and manipulate human languages (that is, <a>natural language</a>). This is a very wide ranging term. It can cover relatively simple problems, such as word tokenization, or more complex behaviors, such as deriving "meaning" from text, recognizing parts of speech, performing accurate translation, and much else.</p>
         
         </section>
       </section>
  
     </section>
     <section id="searching">
-      <h2>String Searching in Natural Language Content</h2>
+      <h2>Searching Text in Natural Language Content</h2>
       
-      <div class="issue">
-		  <p>String searching is widely implemented in browsers and other user agents, but has not historically been well documented. Various W3C working groups have attempted to provide such documentation in the past. The most recent effort produced <a href="https://github.com/w3c/i18n-activity/issues?q=is%3Aissue++label%3As%3Afindtext+label%3Aneeds-resolution">these issues</a>.</p>
-		  
-		  <!-- here are the direct links
-		  <dl>
-			  <li><a href="https://github.com/w3c/i18n-activity/issues/111">111</a></li>
-			  <li><a href="https://github.com/w3c/i18n-activity/issues/110">110</a></li>
-			  <li><a href="https://github.com/w3c/i18n-activity/issues/109">109</a></li>
-			  <li><a href="https://github.com/w3c/i18n-activity/issues/108">108</a></li>
-			  <li><a href="https://github.com/w3c/i18n-activity/issues/107">107</a></li>
-			  <li><a href="https://github.com/w3c/i18n-activity/issues/106">106</a></li>
-			  <li><a href="https://github.com/w3c/i18n-activity/issues/105">105</a></li>
-			  <li><a href="https://github.com/w3c/i18n-activity/issues/104">104</a></li>
-			  <li><a href="https://github.com/w3c/i18n-activity/issues/103">103</a></li>
-		  </dl>
-		  -->
-      </div>
+      <p>Users of the Web often want to search for specific text in a document or collection of documents without having to read line-by-line. Specifications sometimes seek to support this desire by exposing text searching in the Web platform.</p>
       
-      <p>Users of the Web often want to search documents for particular words or phrases within the natural language text of a given document. This is different from the sorts of programmatic matching needed by formal languages (such as markup languages such as [[HTML]]; style sheets [[CSS21]]; or data formats such as [[TURTLE]] or [[JSON-LD]]), and which are described by our document [[CHARMOD-NORM]]. </p>
-      
-      <p>There are different types of string searching. 
+      <p>There are different types of document searching. One type, called a <a>full text search</a>, is the sort of searching most often found in applications such as a search engine. This type of searching is complex, can be resource intensive, and often depends on processes outside the scope of a given search request.</p> 
     
-      <p>One limited form of full-text search&mdash;and the topic of this document&mdash;is sub-string matching. One familiar form of sub-string matching is the "find" feature of your browser. A sub-string match searches the body ("<a>corpus</a>") of a document with the user's input, seeking a match.</p>
+      <p>A more limited form of text search (and the topic of this document) is <q>sub-string matching</q>. One familiar form of sub-string matching is the <q><em>find</em></q> feature of browsers and other types of user-agent. For user agents with physical keyboards, this functionality is often accessed via a key combination such as <kbd>Cmd+F</kbd> or <kbd>Ctrl+F</kbd>. Such a feature might be exposed on the Web via the API <code translate=no>window.find</code>, which is currently not fully standardized, or capabilities such as the proposed [[?SCROLL-TO-TEXT-FRAGMENT]].</p>
       
-      <p>Find operations can have different options or implementation details, such as the addition or removal of case sensitivity, or whether the feature supports different aspects of a regular expression language or "wildcards".</p>
+      <aside class="note">
+          <p>Textual search is different from the sorts of programmatic matching needed by formal languages, such as markup languages like [[HTML]]; style sheets [[CSS21]]; or data formats such as [[TURTLE]] or [[JSON-LD]]. String matching in formal languages is described by our document <cite>String Matching</cite> [[CHARMOD-NORM]].</p>
+      </aside>
       
-      <p>One way that sub-string matching usually differs from other types of <a>full-text search</a> is that, while it may use algorithms in an attempt to suppress or ignore textual variations, it usually does not produce matches that contain additional or unspecified character sequences, words, or phrases.</p>
+      <p>Find operations can provide optional mechanisms for improving or tailoring the matching behavior. For example, the abilility to add (or remove) <a href="#caseVariation">case sensitivity</a>, whether the feature supports different aspects of a regular expression language such as wildcard characters, or whether to limit matches to <a href="#wordBoundary">whole words</a>.</p>
       
-      <p>Quite often, the user's input does not use a sequence of <a>code points</a> identical to that in the text being searched. This can happen for a variety of reasons. Sometimes it is because the text varies in ways the user cannot predict. In other cases it is because the user's keyboard or input method does not provide ready access to the textual variations needed&mdash;or because the user cannot be bothered to input the text accurately. In this section, we examine various common cases known to us.</p>
+      <p>One way that sub-string matching usually differs from <a>full-text search</a> is that, while it might use various algorithms in an attempt to suppress or ignore textual variations, it usually does not produce matches that contain additional or unspecified character sequences, words, or phrases, such as would result from <a>stemming</a> or other <a>NLP</a> processes.</p>
       
-	  <section id="otherEquivalences">
-         <h3>Additional Types of Equivalence</h3>
-         
-         <p>When searching text, the concept of "grapheme boundaries" and "user-perceived characters" can be important. See Section 3 of <cite>Character Model for the World Wide Web: Fundamentals</cite> [[CHARMOD]] for a description. For example, if the user has entered a capital "A" into a search box, should the software find the character &#xc0; (<code class="uname" translate="no">U+00C0 LATIN CAPITAL LETTER A WITH ACCENT GRAVE</code>)? What about the character "A" followed by <code class="uname" translate="no">U+0300 COMBINING ACCENT GRAVE</code>? What about writing systems, such as Devanagari, which use combining marks to suppress or express certain vowels?</p>
+      <p>When attempting to standardize sub-string matching, specification authors often struggle with the complexity that is inherent in the encoding of <a>natural language</a> in computer systems, including the different mechanisms employed to encode characters in the [[Unicode]] standard.</p>
+      
+      <!-- preserving text for the nonce
+               
+         <p>When searching text, the concept of "<a>grapheme</a> boundaries" and "user-perceived characters" can be important. See Section 3 of <cite>Character Model for the World Wide Web: Fundamentals</cite> [[CHARMOD]] for a description. For example, if the user has entered a capital "A" into a search box, should the software find the character &#xc0; (<code class="uname" translate="no">U+00C0 LATIN CAPITAL LETTER A WITH ACCENT GRAVE</code>)? What about the character "A" followed by <code class="uname" translate="no">U+0300 COMBINING ACCENT GRAVE</code>? What about writing systems, such as Devanagari, which use combining marks to suppress or express certain vowels?</p>
          
          <p>In order to describe or implement sub-string matching, it is necessary to understand the types of textual variation that users expect the search feature to pay attention to (or ignore) and the types of features that the implementation will need to consider when building the searching algorithm.</p>
          
          <p>The <cite>Character Model for the World-Wide Web: String Matching</cite> [[CHARMOD-NORM]] describes several textual equivalences which also apply to sub-string matching. These include <a href="https://www.w3.org/TR/charmod-norm/#definitionCaseFolding">case folding</a> and <a href="https://www.w3.org/TR/charmod-norm/#unicodeNormalization">different Unicode normalization forms</a>.
 
          <p>There are other types of equivalence that are interesting when performing sub-string matching. Some forms of equivalence, such as those mentioned above, are based on character properties assigned by Unicode or due to the mapping of legacy character encodings to the Unicode character set. Other "interesting equivalences" go outside of those defined by Unicode. Some of these potential "text normalizations" are application, natural language, or domain specific and should not be overlooked by specifications or implementations.</p>
+      
+      -->
+      
+        
+	  <section id="otherEquivalences">
+      <h3>Problems with Determining Equivalence</h3>   
+      
+      <p>Quite often, the user's input doesn't consist of exactly the same sequence of <a>code points</a> as that used in the document being searched, while the user still expects a match to occur. This can happen for a variety of reasons. Sometimes it is because the text being searched varies in ways the user could not have predicted. In other cases it is because the user's keyboard or input method does not provide ready access to the textual variations needed. It can even be because the user cannot be bothered to input the text accurately.</p>
+      
+      <p>In this section, we examine various common cases known to us which specification authors need to take into consideration when specifying a sub-string match API or mechanism.</p>
+      
+        
+      <section id="languageVariation">
+      <h3>Matching variation due to language</h3>
+      
+      <p>User expectations about whether their search term matches a given part of a document or [=corpus=] sometimes depends on the user's language, the language of the document, or both. It might also involve other factors, such as which keyboards or input methods are available on a given device. This might be because various operations that are part of searching, such as case folding, are locale-affected, or that, given the complexity of human language and culture, that expectations about matching or about the use and interpretation of various character sequences differs, even within a given <a data-cite="i18n-glossary#dfn-script">script</a>. Similarly, the handling of accents, alternate scripts, or character encoding (such as variations in the formation of <a>grapheme clusters</a>) is linked to the specific language of the text in question.</p>
+      
+      <p>It is important to emphasize that we mean <em>language</em> here, and not <a data-cite="i18n-glossary#dfn-script">script</a>. Many different languages that share a script apply different processing or imply different expectations.</p>
+      
+      <p>Implementations of a "find" feature often have to guess what language the user intended based solely on the user's input or on various "hints" in the runtime environment, such as the operating environment locale, the user agent's localization, or the language of the active keyboard. These hints are, at best, a proxy for the user's intent, particularly when the user is searching a document that doesn't match any of these or when the searched document contains more than one language.</p>
+      
+      <aside class="example" id="text-frag-lang" title="User language interaction with user expectations">
+		  
+		  <p>Different languages treat the letter combinations <q>a</q>, <q>ae</q>, and <q>ä</q> differently.
+		     English speakers expect <q>ae</q> to be different from <q>a</q> and <q>ä</q>. Since <q>ä</q> is a foreign letter, they usually expect it to match the unmarked <q>a</q>.
+		     German speakers expect <q>ae</q> and <q>ä</q> to be equivalent (and different from <q>a</q>).
+		     Finnish speakers expect all three to be separate.
+		  </p>
+		  
+		  <p>Now suppose you have a sentence in Finnish:
+		     <strong lang="fi" dir="ltr">Haen Han Solon. Hän on salakuljettaja.</strong></p>
+		  <p>(For the curious, this translates to: <em>I’ll go get Han Solo. He is a smuggler.</em>)</p>
+		  
+		  <p>The above sentence is tagged as Finnish (<code translate=no>lang="fi"</code>). Notice that the letter "n" attached to the end of Han Solo's name (<em>Han Solon</em>) is a part of Finnish grammar.</p>
+		  
+		  <p>Here are some spelling variations that speakers of English, German, and Finnish might enter when performing a "find" operation on the text. (<em>Hint: Try them in the "find" command for your browser when viewing this page.</em>)</p>
+          <ul style="column-count: 2;">
+            <li>Han</li>
+            <li>Hän</li>
+            <li>Haen</li>
+            <li>han</li>
+            <li>hän</li>
+            <li>haen</li>
+          </ul>		  
 
+          <p>Finnish speakers expect that each of the above examples is a different word. They might expect that the case variation between <kbd>Hän</kbd> and <kbd>hän</kbd> might be ignored.
+          German speakers might expect that <kbd>Hän</kbd> and <kbd>Haen</kbd> are equivalent.
+          English speakers might expect <kbd>Han</kbd> to match <kbd>Hän</kbd> (but perhaps not the reverse, since <q>ä</q> is not native to English).
+          However, the language tagging of the document doesn't seem to affect most find operations. 
+          Neither is there usually a way for the user to affect which language is applied to the search term.
+          </p>
+
+         <p>Here is a phrase that we believe means <em>warm marrow</em> in Turkish: <strong lang="tr">ılık ilik</strong>.</p>
+         <p>Here are some spelling variations that English and Turkish speakers might enter:</p>
+          
+         <table style="width: 80%;">
+			 <thead>
+				 <tr><th>Search Term</th><th>Code Points</th></tr>
+			 </thead>
+			 <tbody>
+				 <tr><td>ILIK</td><td><span class="uname">U+0049 U+004C U+0049 U+004B</span></td></tr>
+				 <tr><td>İLİK</td><td><span class="uname">U+0130 U+004C U+0130 U+004B</span></td></tr>
+				 <tr><td>ilik</td><td><span class="uname">U+0069 U+006C U+0069 U+006B</span></td></tr>
+				 <tr><td>ılık</td><td><span class="uname">U+0131 U+006C U+0131 U+006B</span></td></tr>
+			 </tbody>
+         </table>
          
+         <p>Depending on your browser and runtime locale, you can get anomolous matching with these terms. In some browsers, the first three terms above consistently match <q>ilik</q> (with an ASCII dotted-i) but not the word <q>ılık</q> with <span class="codepoint" translate="no"><bdi lang="tr">&#x131;</bdi><code class="uname">U+0131 LATIN SMALL LETTER DOTLESS I</code></span>.</p>
+         <p>This is not what Turkish users would expect, since they expect "I"/"ı" and "İ"/"i" to be caseless pairs. A side-effect of this is that the search term "ılık" only matches its lowercase equivalent&mdash;and that the uppercase variations do not match that word, even when they match the lowercase version with dotted letter i ("ilik"). Such variation means that both English and Turkish users will notice that the search misses words.</p>
+      </aside>
+      
+      </section>
+
+        
         <section id="caseVariation">
 			<h4>Case Folding</h4>
 			
-		    <p>A user might expect a term entered in lowercase to match uppercase equivalents (and perhaps vice-versa). Most sub-string matching feature, such as the browser "find" command, offer a user-selectable option for matching the case of the input to that of the text.</p>
+		    <p>A user might expect a term entered in lowercase to match uppercase equivalents (and perhaps vice-versa). Sub-string matching features, such as the browser "find" command, often offer a user-selectable option for matching (or not) the case of the input to that of the text.</p>
 		    
 		    <p>For a survey of case folding, see the discussion <a href="https://www.w3.org/TR/charmod-norm/#definitionCaseFolding">here</a> in [[CHARMOD-NORM]].</p>
 		
@@ -646,6 +705,11 @@
 		</section>
 		    
       </section>
+      <section id="wordBoundary">
+		  <h3>Word boundaries and "whole word" matching</h3>
+		  
+		  <p>Some languages, such as English or Arabic, use spaces between words. Other languages, such as Chinese, Japanese, or Thai, do not. Some language use spaces to separate other text units, such as phrases. In those languages that do not use spaces between words, computing "whole word" matching often depends on the ability to determine word boundaries when the boundaries are not themselves encoded into the text.</p>
+      </section>
       </section><!-- end of "additional types of equivalence" -->
 	     
 
@@ -706,7 +770,9 @@
 
     <section>
       <h2 id="Acknowledgements" class="informative">Acknowledgements</h2>
-      <p>The W3C Internationalization Working Group and Interest Group, as well as others, provided many comments and suggestions. The Working Group would like to thank: all of the contributors to the Character Model series of documents over the many years of their development. </p>
+      <p>The W3C Internationalization Working Group and Interest Group, as well as others, provided many comments and suggestions. The Working Group would like to thank: all of the contributors to the Character Model series of documents over the many years of their development.</p>
+      
+      <p>The examples in <a href="#text-frag-lang">this example</a> were taken from a page authored by Henri Sivonen, as were a number of concepts and ideas recorded by him in <a href="https://github.com/WICG/scroll-to-text-fragment/issues/233">this issue</a>.</p>
     </section>
   </body>
 </html>
